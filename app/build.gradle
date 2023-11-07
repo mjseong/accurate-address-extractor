@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+sourceCompatibility = '17'
+
 group = 'com.sundayduck'
 version = '1.0-SNAPSHOT'
 
