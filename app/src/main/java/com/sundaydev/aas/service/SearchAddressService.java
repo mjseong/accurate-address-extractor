@@ -8,7 +8,8 @@ public class SearchAddressService {
 
     public void extractAddress(List<String> addresses){
         for(String address: addresses){
-            System.out.println(ExtractionAddress.extractAddressWithRegx(address));
+//            System.out.println(ExtractionAddress.extractAddressWithRegx(address));
+            ExtractionAddress.extractAddressWithRoadRegx(address);
         }
 
     }

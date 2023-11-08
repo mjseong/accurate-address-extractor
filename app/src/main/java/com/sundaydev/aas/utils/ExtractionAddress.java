@@ -17,13 +17,11 @@ public class ExtractionAddress {
 
         String gu = null;
         String road = null;
-        String road2 = null;
-        String road3 = null;
 
-//        String extractAddress = null;
+
         List<String> roads = new ArrayList();
         if(matcher.find()){
-//            extractAddress = matcher.group(0);
+
             gu = matcher.group(1);
             road = matcher.group(2);
 
@@ -33,7 +31,6 @@ public class ExtractionAddress {
 
 
             while (roadMatcher.find()){
-//                System.out.println(roadMatcher.group());
                 roads.add(roadMatcher.group());
             }
 
@@ -49,5 +46,21 @@ public class ExtractionAddress {
         }
 
         return "미출력";
+    }
+
+    public static String extractAddressWithRoadRegx(String candidateAddress){
+        Pattern addressPattern = Pattern.compile(Constant.addrPattern);
+        Matcher matcher = addressPattern.matcher(candidateAddress);
+
+        String addr;
+        String addr2;
+
+        if(matcher.find()){
+            addr = matcher.group(1);
+            addr2 = matcher.group(2);
+            System.out.println(addr+" "+addr2);
+        }
+
+        return "";
     }
 }
