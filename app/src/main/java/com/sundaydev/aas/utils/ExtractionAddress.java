@@ -17,6 +17,7 @@ public class ExtractionAddress {
     private final static Pattern ROAD_GIL_PATTERN = Pattern.compile(Constant.ROAD_GIL_REGX);
     private final static Pattern ROAD_ACCURATE_PATTERN = Pattern.compile(Constant.ROAD_ACCURATE_REGX);
 
+    @Deprecated
     public static String extractAddressWithRegx(String candidateAddress){
 
         String rawAddress = candidateAddress.replaceAll(Constant.specialRemovePattern, "");
@@ -122,15 +123,7 @@ public class ExtractionAddress {
         }
 
         if(!roadRList.isEmpty()){
-//            if(!roadGList.isEmpty()){
-//                String fullRoad = roadRList.get(0)+roadGList.get(0);
-                //valid accurate RoadName pattern
-//                if(ROAD_ACCURATE_PATTERN.matcher(fullRoad).find()){
-//                    stringJoiner.add(fullRoad);
-//                }
-//            }else{
-                stringJoiner.add(roadRList.get(0));
-//            }
+            stringJoiner.add(roadRList.get(0));
         }
 
         if(!roadGList.isEmpty()) {
