@@ -2,24 +2,34 @@ package com.sundaydev.aas;
 
 import com.sundaydev.aas.service.SearchAddressService;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class AddressSearchApplication {
 
     public static void main(String[] args){
 
-        List<String> list = List.of(
-                "마 포구 도화-2길 코끼리분식",
-                "분당 백현로",
-                "디지털로30길 28",
-                "분당구 대왕판교1로 여러분들로 기쁩니다",
-                "분당구 야탑길",
-                "성남, 분당 백 현 로 265, 푸른마을 아파트로 보내주세요!!");
-
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         SearchAddressService addressService = new SearchAddressService();
+        try {
+            System.out.print("콘솔 입력을 하세요: ");
+            String userInput = reader.readLine(); // 콘솔에서 한 줄을 읽어옵니다.
 
-        addressService.extractAddress(list);
+            System.out.println("사용자 입력: " + userInput);
 
+            String address = addressService.extractAddress(userInput);
+            System.out.println("출력 결과: " + address);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }
