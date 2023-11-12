@@ -30,7 +30,7 @@ public class ExtractionAddressUtilTest {
 
     @Test
     public void example1Test(){
-        String in = "성남, 분당 백현로 265, 푸른마을 아파트로 보내주세요!! ";
+        String in = "성남, 분당 백 현 로 265, 푸른마을 아파트로 보내주세요!! ";
         ExtractionAddress.extractAddressWithTokenizer(in);
     }
 
@@ -43,7 +43,7 @@ public class ExtractionAddressUtilTest {
 
     @Test
     public void tokenTest2(){
-        String in = "저희집 주소는 연 수 구 컨벤시아 대 로1 3 0 번길 자이아파트로 보내주시면 되요.";
+        String in = "저희집 주소는 연수 컨 벤 시아대 로 1 3 0번 길 자이아파트로 보내주시면 되요.";
         var result = ExtractionAddress.extractAddressWithTokenizer(in);
         System.out.println(result);
     }

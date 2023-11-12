@@ -25,21 +25,20 @@ public class ExtractionAddress {
 
     public static Set<String> extractAddressWithTokenizer(String candidateAddress) {
         candidateAddress = candidateAddress.replaceAll("[^a-zA-Z0-9가-힣\\s]", "");
-        candidateAddress = candidateAddress.replaceAll(" ", " ,");
+        candidateAddress = candidateAddress.replaceAll(" ", ",");
         List<String> words = Arrays.asList(candidateAddress.split(","));
         List<String> seqList = new ArrayList<>();
         System.out.println(words);
 
         StringJoiner stringJoiner = new StringJoiner(" ");
         String mergeWord = "";
+        String beforeWord = "";
         //preProcess
         for(String word: words) {
-            if(word.length() == 2 && word.contains(" ")){
-                mergeWord += word.trim();
-            }else{
-                mergeWord += word;
-            }
-            System.out.println(mergeWord);
+
+            mergeWord = mergeWordWithCondition(mergeWord, word, beforeWord);
+
+//            System.out.println(mergeWord);
             ProcessData processData = preProcess(mergeWord);
             if(processData != null
                     && !processData.result().isBlank()){
@@ -51,6 +50,7 @@ public class ExtractionAddress {
                     mergeWord = "";
                 }
             }
+            beforeWord = word;
         }
 
         System.out.println("preProcess result: " + seqList);
@@ -68,21 +68,36 @@ public class ExtractionAddress {
         return candidateSet;
     }
 
-//    private static String concatWord(String sequence){
-//        List<String> words = List.of(sequence.split(" "));
-//        String mergeWord = "";
-//        for(String word: words){
-//            ProcessData processData = preProcess(word);
-//            if(processData != null &&
-//                    !processData.result().isBlank()){
-//                mergeWord += processData.result();
-//                continue;
-//            }
-//            mergeWord = word;
-//        }
-////        System.out.println(mergeWord);
-//        return mergeWord;
-//    }
+    private static String mergeWordWithCondition(String mergeWord, String word, String beforeWord){
+
+        Pattern p = Pattern.compile("\\b[구|로|길]+");
+        Matcher m = p.matcher(word);
+        String result = "";
+
+        //마지막 글자가 한글자일 경우 공백이 있는지 검사.
+        int i = mergeWord.lastIndexOf(" ");
+        String whiteSpaceWord = "";
+        if(i>1){
+            whiteSpaceWord = mergeWord.substring(i, mergeWord.length());
+            if(whiteSpaceWord.length() > 2){
+                whiteSpaceWord = "";
+            }
+        }
+        if(m.find()){ //구,로,길 앞에 글자가 없다면 merge함
+            result = mergeWord + word;
+        }else{
+            //나머지는 글자 공백 그대로 유지
+            if(!whiteSpaceWord.isBlank()){ //문장중 맨뒤 글자 앞 공백이있으면 병합함.
+                result = mergeWord + word;
+            }else if(beforeWord.length()==1){
+                result = mergeWord + word;
+            }
+            else{ //나머지 2글자 이상 병합은 문자 공백을 준다.
+                result = mergeWord +" "+ word;
+            }
+        }
+        return result;
+    }
 
     private static ProcessData preProcess(String candidateAddress){
         Matcher mGu = pGu.matcher(candidateAddress);
@@ -100,7 +115,9 @@ public class ExtractionAddress {
         }
         else if(mGu.find()) {
             String result = mGu.group(1) != null ? mGu.group(1): mGu.group(2);
-            processData = new ProcessData(result, null);
+            String remain = mGu.group(3) != null ? mGu.group(3) : null;
+
+            processData = new ProcessData(result, remain);
         }
         else if(mRo.find()){
             String result = mRo.group(1) != null ?
@@ -119,6 +136,8 @@ public class ExtractionAddress {
     }
 
     private static String postProcess(String candidateAddress){
+        Pattern p = Pattern.compile("");
+
         Matcher mGUROGIL = pGUROGIL.matcher(candidateAddress);
         Matcher mGuRo = pGuRo.matcher(candidateAddress);
         Matcher mGuGil = pGuGil.matcher(candidateAddress);
@@ -129,29 +148,7 @@ public class ExtractionAddress {
         return null;
     }
 
-    private static String checkAddressRegx(String candidateAddress){
 
-        Matcher mGUROGIL = pGUROGIL.matcher(candidateAddress);
-        Matcher mGuRo = pGuRo.matcher(candidateAddress);
-        Matcher mGuGil = pGuGil.matcher(candidateAddress);
-        Matcher mRoGil = pRoGil.matcher(candidateAddress);
-        Matcher mRo = pRo.matcher(candidateAddress);
-
-        String result = "";
-        if(mGUROGIL.find()){
-            result =  mGUROGIL.group();
-        }
-        else if(mGuRo.find()){
-            result =  mGuRo.group(1).replaceAll(" ", "") +" "+ mGuRo.group(2).replaceAll(" ", "");
-        }
-        else if(mGuGil.find()){
-            result = mGuGil.group(1).replaceAll(" ", "") + " " + mGuGil.group(2).replaceAll(" ", "");
-        }
-        else if(mRoGil.find()){
-            result = mRoGil.group(1).replaceAll(" ", "") +" "+ mRoGil.group(2).replaceAll(" ", "");
-        }
-        return result;
-    }
 
 //    public static Map extractAddressWithRegx(String candidateAddress){
 //        List<String> cityList = new ArrayList<>();
