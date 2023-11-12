@@ -18,8 +18,6 @@ public class AddressSearchApplication {
         AddressRepository addressRepository = new MockAddressDataRepository(); //임시 gu데이터 조회용 추가
         SearchAddressService addressService = new SearchAddressService(addressRepository);
 
-        System.out.println("프로그램을 종료하려면 'exit'을 입력하세요.");
-
         try {
             System.out.print("프로그램 종류(csv: c 또는 console: 아무 키나 눌러주세요)를 입력을 하세요: ");
             String userInput = reader.readLine();
@@ -34,6 +32,7 @@ public class AddressSearchApplication {
                 }
             }
 
+            System.out.println("프로그램을 종료하려면 'exit'을 입력하세요.");
             switch (type){
                 case CSV -> {
                     System.out.print("csv mode - 파일 경로 입력을 하세요: ");
