@@ -1,5 +1,6 @@
 package com.sundaydev.addr.kis.common.utils;
 
+import com.sundaydev.addr.kis.common.AddressConstant;
 import com.sundaydev.addr.kis.common.KoreaRoadAddressRegxType;
 
 import java.util.*;
@@ -63,9 +64,9 @@ public class ExtractionAddress {
                 String seqWord = seqList.get(j);
 
                 //앞 대상의 규칙에 따라 뒤에 글자의 공백들을 제거한다.
-                if((subStr.endsWith("구") && seqWord.endsWith("로"))
-                        ||(subStr.endsWith("로") && seqWord.endsWith("길"))
-                        ||(subStr.endsWith("구") && seqWord.endsWith("길"))){
+                if((subStr.endsWith(AddressConstant.KO_GU) && seqWord.endsWith(AddressConstant.KO_RO))
+                        ||(subStr.endsWith(AddressConstant.KO_RO) && seqWord.endsWith(AddressConstant.KO_GIL))
+                        ||(subStr.endsWith(AddressConstant.KO_GU) && seqWord.endsWith(AddressConstant.KO_GIL))){
                     seqWord = seqWord.replaceAll(" ", "");
                 }
 
