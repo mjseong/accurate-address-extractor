@@ -1,4 +1,4 @@
-package com.sundaydev.aas.utils;
+package com.sundaydev.aas.common.utils;
 
 public record ProcessData(String result, String remain) {
 

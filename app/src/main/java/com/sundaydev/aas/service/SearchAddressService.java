@@ -1,21 +1,20 @@
 package com.sundaydev.aas.service;
 
-import com.sundaydev.aas.utils.ExtractionAddress;
-import com.sundaydev.aas.utils.KoreaRoadAddressRegxType;
+import com.sundaydev.aas.common.KoreaRoadAddressRegxType;
+import com.sundaydev.aas.common.utils.ExtractionAddress;
+import com.sundaydev.aas.repository.AddressRepository;
 
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SearchAddressService {
+    private final AddressRepository addressRepository;
+    private final Pattern pGU = Pattern.compile(KoreaRoadAddressRegxType.P_GU.getRegx());
 
-    private final Pattern P_GU_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_GIL.getRegx());
-    private final Pattern P_GU_RO = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO.getRegx());
-    private final Pattern P_GU_RO_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO_GIL.getRegx());
-    private final Pattern P_RO_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_RO_GIL.getRegx());
-
+    public SearchAddressService(AddressRepository addressRepository){
+        this.addressRepository = addressRepository;
+    }
 
     public void extractAddresses(List<String> addresses){
 
@@ -27,48 +26,46 @@ public class SearchAddressService {
     public String extractAddress(String candidateAddress){
         //pre-processing
         Set<String> candidateAddrSet = ExtractionAddress.extractAddressWithTokenizer(candidateAddress);
-        StringJoiner stringJoiner = new StringJoiner(" ");
-        System.out.println("candidateSet: " + candidateAddrSet);
+        List<String> vaildatedList = new ArrayList<>();
 
         //validation
-        candidateAddrSet.forEach(address -> {
-            if(this.validateAddress(address)){
-               stringJoiner.add(address);
+        candidateAddrSet.forEach(cAddr -> {
+            if(this.validateAddress(cAddr)){
+                vaildatedList.add(cAddr);
             }
         });
 
-        return stringJoiner.toString();
+        return vaildatedList.get(0);
     }
 
     //TODO: 데이터베이스 조회 또는 도로명 주소 openApi 호출로 유효성 검사
     private boolean validateAddress(String address){
 
-        if(this.getPrintAddressPattern(address).isBlank()){
-            return false;
+        String result = this.getAddress(address);
+        if(result != null && !result.isBlank()){
+            return true;
         }
-        return true;
+        return false;
     }
 
-    private String getPrintAddressPattern(String address){
-        Matcher mGUGIL = P_GU_GIL.matcher(address);
-        Matcher mGURO = P_GU_RO.matcher(address);
-        Matcher mGUROGIL = P_GU_RO_GIL.matcher(address);
-        Matcher mROGIL = P_RO_GIL.matcher(address);
+    private String getAddress(String address){
 
-        if(mGUROGIL.find()){
-            return mGUROGIL.group();
+        /**
+         * TODO: communication Address api or findByAddress DB
+         * DB 또는 API검색 기능을 넣지 않아 임시로 대한민국 자치구 검색만 해본다.
+         */
+        Matcher m = pGU.matcher(address);
+        if(m.find()){
+            String gu = m.group(1);
+            gu = addressRepository.findByGu(gu);
+            if(gu != null && gu.isBlank()){
+                return "";
+            }else{
+                return gu;
+            }
         }
-        if(mGURO.find()){
-            return mGURO.group();
-        }
-        if(mGUGIL.find()){
-            return mGUGIL.group();
-        }
-        if(mROGIL.find()){
-            return mROGIL.group();
-        }
-
-        return "";
+        return "exist";
     }
+
 
 }

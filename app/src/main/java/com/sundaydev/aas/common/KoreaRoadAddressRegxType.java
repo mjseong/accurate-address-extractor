@@ -1,10 +1,7 @@
-package com.sundaydev.aas.utils;
+package com.sundaydev.aas.common;
 
 public enum KoreaRoadAddressRegxType {
 
-//    P_GU_RO_GIL("\\b([가-힣]+구)\\s*([가-힣A-Za-z·\\d~\\-\\.]+로)\\s*([가-힣A-Za-z·\\d~\\-\\.]+길)\\b"),
-//    P_GU_RO("\\b(?:([가-힣]+구)\\s*([가-힣A-Za-z·\\d~\\-\\.]+로))\\b"),
-//    P_GU_GIL("\\b([가-힣]+구)\\s*([가-힣A-Za-z·\\d~\\-\\.]+길)\\b"),
     P_RO_GIL("\\b([가-힣A-Za-z·\\d~\\-\\.\\s*]+로)\\s*([가-힣A-Za-z·\\d~\\-\\.\\s*]+길)\\b"),
     P_GU("\\b(?:([가-힣\\s]+구))\\b|(?:([가-힣\\s*]+구)\\s*([가-힣A-Za-z·\\d~\\-\\.]+))\\b"),
     P_RO("\\b(?:([가-힣A-Za-z·\\d~\\-\\.\\s]+로)\\b)|(?:([가-힣A-Za-z·\\d~\\-\\.\\s*]+로)\\s*([가-힣A-Za-z·\\d~\\-\\.]+))\\b"),

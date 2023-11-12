@@ -1,5 +1,7 @@
 package com.sundaydev.aas;
 
+import com.sundaydev.aas.repository.AddressRepository;
+import com.sundaydev.aas.repository.MockAddressDataRepository;
 import com.sundaydev.aas.service.SearchAddressService;
 
 import java.io.BufferedReader;
@@ -11,7 +13,8 @@ public class AddressSearchApplication {
     public static void main(String[] args){
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        SearchAddressService addressService = new SearchAddressService();
+        AddressRepository addressRepository = new MockAddressDataRepository(); //임시 gu데이터 조회용 추가
+        SearchAddressService addressService = new SearchAddressService(addressRepository);
         try {
             System.out.print("콘솔 입력을 하세요: ");
             String userInput = reader.readLine(); // 콘솔에서 한 줄을 읽어옵니다.

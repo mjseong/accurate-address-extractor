@@ -1,4 +1,6 @@
-package com.sundaydev.aas.utils;
+package com.sundaydev.aas.common.utils;
+
+import com.sundaydev.aas.common.KoreaRoadAddressRegxType;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -32,7 +34,7 @@ public class ExtractionAddress {
         List<String> seqList = new ArrayList<>();
         System.out.println(words);
 
-        StringJoiner stringJoiner = new StringJoiner(" ");
+//        StringJoiner stringJoiner = new StringJoiner(" ");
         String mergeWord = "";
         String beforeWord = "";
 
@@ -42,11 +44,11 @@ public class ExtractionAddress {
             mergeWord = mergeWordWithCondition(mergeWord, word, beforeWord);
 
             ProcessData processData = preProcess(mergeWord);
-
+//            System.out.println(mergeWord);
             if(processData != null
                     && !processData.result().isBlank()){
                 seqList.add(processData.result());
-                stringJoiner.add(processData.result());
+
                 if(processData.remain()!=null){
                     mergeWord = processData.remain();
                 }else {
@@ -127,8 +129,8 @@ public class ExtractionAddress {
         ProcessData processData = null;
 
         if(mRoGil.find()){
-            String result = mRoGil.group(1).replaceAll(" ", "")
-                    +" "+ mRoGil.group(2).replaceAll(" ", "");
+            String result = mRoGil.group(1)
+                    +" "+ mRoGil.group(2);
 
             processData = new ProcessData(result, null);
         }
