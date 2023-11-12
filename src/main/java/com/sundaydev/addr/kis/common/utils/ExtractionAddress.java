@@ -36,14 +36,14 @@ public class ExtractionAddress {
 
             mergeWord = mergeWordWithCondition(mergeWord, word, beforeWord);
 
-            ProcessData processData = preProcess(mergeWord);
+            PreprocessToken processToken = preprocessTokenization(mergeWord);
 //            System.out.println(mergeWord);
-            if(processData != null
-                    && !processData.result().isBlank()){
-                seqList.add(processData.result());
+            if(processToken != null
+                    && !processToken.result().isBlank()){
+                seqList.add(processToken.result());
 
-                if(processData.remain()!=null){
-                    mergeWord = processData.remain();
+                if(processToken.remain()!=null){
+                    mergeWord = processToken.remain();
                 }else {
                     mergeWord = "";
                 }
@@ -72,7 +72,7 @@ public class ExtractionAddress {
                 subStr = subStr +" "+ seqWord;
             }
 
-            Set result = postProcess(subStr.trim());
+            Set result = postprocessTokenization(subStr.trim());
 
             if(!result.isEmpty()){
                 candidateSet.addAll(result);
@@ -116,39 +116,39 @@ public class ExtractionAddress {
     /**
      * 로/길, 구, 로, 길 tokenizer 처리하기 위한 전처리 method
      * @param candidateAddress
-     * @return {@link ProcessData}
+     * @return {@link PreprocessToken}
      */
-    private static ProcessData preProcess(String candidateAddress){
+    private static PreprocessToken preprocessTokenization(String candidateAddress){
         Matcher mGu = pGu.matcher(candidateAddress);
         Matcher mRo = pRo.matcher(candidateAddress);
         Matcher mGil = pGil.matcher(candidateAddress);
         Matcher mRoGil = pRoGil.matcher(candidateAddress);
 
-        ProcessData processData = null;
+        PreprocessToken processData = null;
 
         if(mRoGil.find()){
             String result = mRoGil.group(1)
                     +" "+ mRoGil.group(2);
 
-            processData = new ProcessData(result, null);
+            processData = new PreprocessToken(result, null);
         }
         else if(mGu.find()) {
             String result = mGu.group(1) != null ? mGu.group(1): mGu.group(2);
             String remain = mGu.group(3) != null ? mGu.group(3) : null;
 
-            processData = new ProcessData(result, remain);
+            processData = new PreprocessToken(result, remain);
         }
         else if(mRo.find()){
             String result = mRo.group(1) != null ?
                     mRo.group(1) : mRo.group(2);
             String remain = mRo.group(3) != null ? mRo.group(3) : null;
 
-            processData = new ProcessData(result, remain);
+            processData = new PreprocessToken(result, remain);
         }
         else if(mGil.find()){
             String result = mGil.group(1) != null ?
                     mGil.group(1): mGil.group(2);
-            processData = new ProcessData(result, null);
+            processData = new PreprocessToken(result, null);
         }
 
         return processData;
@@ -159,7 +159,7 @@ public class ExtractionAddress {
      * @param candidateAddress
      * @return {@link LinkedHashSet}
      */
-    private static Set postProcess(String candidateAddress){
+    private static Set postprocessTokenization(String candidateAddress){
 
         Set postSet = new LinkedHashSet();
         Matcher mGUROGIL = pAGuRoGil.matcher(candidateAddress);
