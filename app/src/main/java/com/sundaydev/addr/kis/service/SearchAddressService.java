@@ -2,8 +2,15 @@ package com.sundaydev.addr.kis.service;
 
 import com.sundaydev.addr.kis.common.KoreaRoadAddressRegxType;
 import com.sundaydev.addr.kis.common.utils.ExtractionAddress;
+import com.sundaydev.addr.kis.common.utils.ExtractionCsv;
+import com.sundaydev.addr.kis.exception.AddressSearchException;
+import com.sundaydev.addr.kis.exception.ErrorType;
 import com.sundaydev.addr.kis.repository.AddressRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +22,29 @@ public class SearchAddressService {
     public SearchAddressService(AddressRepository addressRepository){
         this.addressRepository = addressRepository;
     }
+
+    public void extractAddresses(String csvPath) throws IOException {
+
+        File file = new File(csvPath);
+        Path path = Paths.get(file.getAbsolutePath());
+        List<String> candidateAddresses = ExtractionCsv.extractCsv(path);
+
+        if(candidateAddresses.isEmpty()){
+            throw new AddressSearchException(ErrorType.NOT_FOUND);
+        }
+
+        for(String address: candidateAddresses){
+            try {
+                String result = this.extractAddress(address);
+                System.out.println(String.format("입력주소: %s \n" +
+                        "출력주소: %s", address, result));
+            }catch (AddressSearchException ase){
+                System.out.println("오류주소: "+address);
+                ase.getReason();
+            }
+        }
+    }
+
     public String extractAddress(String candidateAddress){
         //pre-processing
         Set<String> candidateAddrSet = ExtractionAddress.extractAddressWithTokenizer(candidateAddress);
@@ -26,6 +56,10 @@ public class SearchAddressService {
                 vaildatedList.add(cAddr);
             }
         });
+
+        if(vaildatedList.isEmpty()){
+            throw new AddressSearchException(ErrorType.NOT_FOUND, "candidate Address set is empty");
+        }
 
         return vaildatedList.get(0);
     }

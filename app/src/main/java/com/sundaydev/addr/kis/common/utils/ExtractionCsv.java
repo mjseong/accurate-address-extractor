@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class ExtractionCsv {
 
-    public static List<String> extractCsv(Path path){
+    public static List<String> extractCsv(Path path) throws IOException {
 
         try {
             List<String> addresses = new ArrayList<>();
@@ -32,9 +32,8 @@ public class ExtractionCsv {
 
             return addresses;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("경로가 잘못되었습니다.");
+            throw e;
         }
-
-        return null;
     }
 }

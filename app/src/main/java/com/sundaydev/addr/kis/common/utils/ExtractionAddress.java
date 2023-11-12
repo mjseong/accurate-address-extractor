@@ -26,7 +26,7 @@ public class ExtractionAddress {
         candidateAddress = candidateAddress.replaceAll("[^a-zA-Z0-9가-힣\\s]", "");
         List<String> words = Arrays.asList(candidateAddress.split(" "));
         List<String> seqList = new ArrayList<>();
-        System.out.println("input words: " + words);
+//        System.out.println("input words: " + words);
 
         String mergeWord = "";
         String beforeWord = "";
@@ -51,7 +51,7 @@ public class ExtractionAddress {
             beforeWord = word;
         }
 
-        System.out.println("preProcess result: " + seqList);
+//        System.out.println("preProcess result: " + seqList);
 
         Set<String> candidateSet = new LinkedHashSet<>();
 
@@ -79,7 +79,7 @@ public class ExtractionAddress {
             }
         }
 
-        System.out.println("postProcess candidateSet: " + candidateSet);
+//        System.out.println("postProcess candidateSet: " + candidateSet);
         return candidateSet;
     }
 

@@ -1,11 +1,14 @@
 package com.sundaydev.addr.kis;
 
+import com.sundaydev.addr.kis.exception.AddressSearchException;
 import com.sundaydev.addr.kis.repository.AddressRepository;
 import com.sundaydev.addr.kis.repository.MockAddressDataRepository;
 import com.sundaydev.addr.kis.service.SearchAddressService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 public class AddressSearchTest {
 
@@ -80,11 +83,25 @@ public class AddressSearchTest {
         Assertions.assertEquals("순암로 36번길", result);
     }
 
-    public void notFoundGuTest(){
-        String in = "안녕하세요 제가 경기도 성남시 순암로 36번길 87에 살아요 치킨한마리 보내주세요";
+    @Test
+    public void sentenceExtractAddressTest3(){
+        String in = "창원시 마 산 합 포 구  TK 컨 벤 시아대 로13 0번 길 32";
         String result = searchAddressService.extractAddress(in);
-        Assertions.assertEquals("순암로 36번길", result);
+        Assertions.assertEquals("마산합포구 TK컨벤시아대로 130번길", result);
     }
 
+    @Test
+    public void notFoundGuTest(){
+        String in = "제가 전구 27번길에 사는데요.";
+        Assertions.assertThrows(AddressSearchException.class, () ->{
+            searchAddressService.extractAddress(in);
+        });
+    }
+
+    @Test
+    public void csvReadTest() throws IOException {
+        String csvPath = "/Users/myeongjae/Downloads/address_example.csv";
+        searchAddressService.extractAddresses(csvPath);
+    }
 
 }
