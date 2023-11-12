@@ -23,15 +23,12 @@ public class ExtractionAddress {
     private final static Pattern pRo = Pattern.compile(KoreaRoadAddressRegxType.P_RO.getRegx());
     private final static Pattern pGil = Pattern.compile(KoreaRoadAddressRegxType.P_GIL.getRegx());
 
-    private final static Pattern pGuOrRo = Pattern.compile(KoreaRoadAddressRegxType.P_GU_OR_RO.getRegx());
-
     private final static Pattern pWord = Pattern.compile("\\b[구|로|길]+");
 
 
     public static Set<String> extractAddressWithTokenizer(String candidateAddress) {
         candidateAddress = candidateAddress.replaceAll("[^a-zA-Z0-9가-힣\\s]", "");
-        candidateAddress = candidateAddress.replaceAll(" ", ",");
-        List<String> words = Arrays.asList(candidateAddress.split(","));
+        List<String> words = Arrays.asList(candidateAddress.split(" "));
         List<String> seqList = new ArrayList<>();
         System.out.println(words);
 
