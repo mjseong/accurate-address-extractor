@@ -6,6 +6,7 @@ import com.sundaydev.addr.kis.repository.MockAddressDataRepository;
 import com.sundaydev.addr.kis.service.SearchAddressService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -98,9 +99,10 @@ public class AddressSearchTest {
         });
     }
 
+    @Disabled
     @Test
     public void csvReadTest() throws IOException {
-        String csvPath = "/Users/myeongjae/Downloads/address_example.csv";
+        String csvPath = "/address_example.csv";
         searchAddressService.extractAddresses(csvPath);
     }
 

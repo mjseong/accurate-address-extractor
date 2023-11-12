@@ -17,6 +17,15 @@ dependencies {
     testImplementation 'org.jetbrains:annotations:24.0.0'
 }
 
+jar{
+    manifest{
+      attributes "Main-Class": "com.sundaydev.addr.kis.AddressSearchApplication"
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 test {
     useJUnitPlatform()
 }
