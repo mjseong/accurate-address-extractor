@@ -1,4 +1,4 @@
-package com.sundaydev.aas.common;
+package com.sundaydev.addr.kis.common;
 
 public enum KoreaRoadAddressRegxType {
 

@@ -1,6 +1,6 @@
-package com.sundaydev.aas.common.utils;
+package com.sundaydev.addr.kis.common.utils;
 
-import com.sundaydev.aas.common.Constant;
+import com.sundaydev.addr.kis.common.AddressConstant;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ public class ExtractionCsv {
 
         try {
             List<String> addresses = new ArrayList<>();
-            Pattern csvPattern = Pattern.compile(Constant.csvPattern);
+            Pattern csvPattern = Pattern.compile(AddressConstant.csvPattern);
             Files.readAllLines(path)
                     .forEach(line -> {
                         Matcher m = csvPattern.matcher(line);

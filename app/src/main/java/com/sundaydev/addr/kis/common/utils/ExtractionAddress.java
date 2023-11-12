@@ -1,18 +1,12 @@
-package com.sundaydev.aas.common.utils;
+package com.sundaydev.addr.kis.common.utils;
 
-import com.sundaydev.aas.common.KoreaRoadAddressRegxType;
+import com.sundaydev.addr.kis.common.KoreaRoadAddressRegxType;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExtractionAddress {
-
-//    private final static Pattern CITY_PATTERN = Pattern.compile(Constant.CITY_REGX);
-//    private final static Pattern GU_PATTERN = Pattern.compile(Constant.GU_REGX);
-//    private final static Pattern ROAD_DST_PATTERN = Pattern.compile(Constant.ROAD_DST_REGX);
-//    private final static Pattern ROAD_GU_PATTERN = Pattern.compile(Constant.ROAD_RO_REGX);
-//    private final static Pattern ROAD_GIL_PATTERN = Pattern.compile(Constant.ROAD_GIL_REGX);
 
     private final static Pattern pAGuRoGil = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO_GIL.getRegx());
     private final static Pattern pAGuRo = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO.getRegx());
@@ -32,9 +26,8 @@ public class ExtractionAddress {
         candidateAddress = candidateAddress.replaceAll("[^a-zA-Z0-9가-힣\\s]", "");
         List<String> words = Arrays.asList(candidateAddress.split(" "));
         List<String> seqList = new ArrayList<>();
-        System.out.println(words);
+        System.out.println("input words: " + words);
 
-//        StringJoiner stringJoiner = new StringJoiner(" ");
         String mergeWord = "";
         String beforeWord = "";
 
@@ -120,6 +113,11 @@ public class ExtractionAddress {
         return result;
     }
 
+    /**
+     * 로/길, 구, 로, 길 tokenizer 처리하기 위한 전처리 method
+     * @param candidateAddress
+     * @return {@link ProcessData}
+     */
     private static ProcessData preProcess(String candidateAddress){
         Matcher mGu = pGu.matcher(candidateAddress);
         Matcher mRo = pRo.matcher(candidateAddress);
@@ -156,6 +154,11 @@ public class ExtractionAddress {
         return processData;
     }
 
+    /**
+     * 전처리 이후 candidateAddress가될 후보군을 검증하는 method
+     * @param candidateAddress
+     * @return {@link LinkedHashSet}
+     */
     private static Set postProcess(String candidateAddress){
 
         Set postSet = new LinkedHashSet();
@@ -187,77 +190,5 @@ public class ExtractionAddress {
 
         return postSet;
     }
-
-
-
-//    public static Map extractAddressWithRegx(String candidateAddress){
-//        List<String> cityList = new ArrayList<>();
-//        List<String> guList = new ArrayList<>();
-//        List<String> roadRList = new ArrayList<>();
-//        List<String> roadGList = new ArrayList<>();
-//        List<String> sequenceList = new ArrayList<>();
-//
-////        candidateAddress = candidateAddress.replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]", " ");
-//        String[] words = candidateAddress.split(" ");
-//        String candidateAddr = "";
-//
-//        for(String word: words) {
-//            Matcher cityMatcher = CITY_PATTERN.matcher(word);
-//            Matcher guMatcher = GU_PATTERN.matcher(word);
-//            Matcher roadMatcher = ROAD_DST_PATTERN.matcher(word);
-//
-//            //
-//            if(cityMatcher.find()){
-//                cityList.add(cityMatcher.group(1));
-//                sequenceList.add(cityMatcher.group(1));
-//            }
-//
-//            //
-//            if(guMatcher.find()){
-//                String gu = guMatcher.group(3).replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣]","");
-//                guList.add(gu);
-//                sequenceList.add(gu);
-//            }
-//
-//            if(roadMatcher.find()){
-//                String road = roadMatcher.group();
-//                Matcher roMatcher = ROAD_GU_PATTERN.matcher(road);
-//                Matcher gilMatcher = ROAD_GIL_PATTERN.matcher(road);
-//                if(roMatcher.find()){
-//                    roadRList.add(roMatcher.group(3));
-//                    sequenceList.add(roMatcher.group(3));
-//                }
-//                if(gilMatcher.find()) {
-//                    roadGList.add(gilMatcher.group(3));
-//                    sequenceList.add(gilMatcher.group(3));
-//                }
-//            }
-//
-//            if(word.length() < 2){
-//                candidateAddr += word;
-//                if(word.endsWith(Constant.KO_RO)){
-//                    roadRList.add(candidateAddr);
-//                    sequenceList.add(candidateAddr);
-//                    candidateAddr = "";
-//                } else if(word.endsWith(Constant.KO_GIL)){
-//                    roadGList.add(candidateAddr);
-//                    sequenceList.add(candidateAddr);
-//                    candidateAddr = "";
-//                }
-//            }
-//        }
-//
-//        System.out.println(sequenceList);
-//        Map map = Map.of(
-//                Constant.KEY_CITY,cityList,
-//                Constant.KEY_GU,guList,
-//                Constant.KEY_RO,roadRList,
-//                Constant.KEY_GIL,roadGList
-//        );
-//
-//        return map;
-//    }
-
-
 
 }

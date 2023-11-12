@@ -1,8 +1,8 @@
-package com.sundaydev.aas;
+package com.sundaydev.addr.kis;
 
-import com.sundaydev.aas.repository.AddressRepository;
-import com.sundaydev.aas.repository.MockAddressDataRepository;
-import com.sundaydev.aas.service.SearchAddressService;
+import com.sundaydev.addr.kis.repository.AddressRepository;
+import com.sundaydev.addr.kis.repository.MockAddressDataRepository;
+import com.sundaydev.addr.kis.service.SearchAddressService;
 
 import java.io.BufferedReader;
 import java.io.IOException;

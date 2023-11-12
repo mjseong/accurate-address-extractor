@@ -1,8 +1,8 @@
-package com.sundaydev.aas;
+package com.sundaydev.addr.kis;
 
-import com.sundaydev.aas.repository.AddressRepository;
-import com.sundaydev.aas.repository.MockAddressDataRepository;
-import com.sundaydev.aas.service.SearchAddressService;
+import com.sundaydev.addr.kis.repository.AddressRepository;
+import com.sundaydev.addr.kis.repository.MockAddressDataRepository;
+import com.sundaydev.addr.kis.service.SearchAddressService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +75,12 @@ public class AddressSearchTest {
 
     @Test
     public void sentenceExtractAddressTest2(){
+        String in = "안녕하세요 제가 경기도 성남시 순암로 36번길 87에 살아요 치킨한마리 보내주세요";
+        String result = searchAddressService.extractAddress(in);
+        Assertions.assertEquals("순암로 36번길", result);
+    }
+
+    public void notFoundGuTest(){
         String in = "안녕하세요 제가 경기도 성남시 순암로 36번길 87에 살아요 치킨한마리 보내주세요";
         String result = searchAddressService.extractAddress(in);
         Assertions.assertEquals("순암로 36번길", result);

@@ -1,8 +1,8 @@
-package com.sundaydev.aas.service;
+package com.sundaydev.addr.kis.service;
 
-import com.sundaydev.aas.common.KoreaRoadAddressRegxType;
-import com.sundaydev.aas.common.utils.ExtractionAddress;
-import com.sundaydev.aas.repository.AddressRepository;
+import com.sundaydev.addr.kis.common.KoreaRoadAddressRegxType;
+import com.sundaydev.addr.kis.common.utils.ExtractionAddress;
+import com.sundaydev.addr.kis.repository.AddressRepository;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -15,14 +15,6 @@ public class SearchAddressService {
     public SearchAddressService(AddressRepository addressRepository){
         this.addressRepository = addressRepository;
     }
-
-    public void extractAddresses(List<String> addresses){
-
-        for(String address: addresses){
-
-        }
-    }
-
     public String extractAddress(String candidateAddress){
         //pre-processing
         Set<String> candidateAddrSet = ExtractionAddress.extractAddressWithTokenizer(candidateAddress);

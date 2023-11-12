@@ -1,6 +1,6 @@
-package com.sundaydev.aas.common;
+package com.sundaydev.addr.kis.common;
 
-public class Constant {
+public class AddressConstant {
 
     public final static String CITY_REGX = "^(.*[가-힣]{2,}(시))";
     public final static String GU_REGX = "^(.*[가-힣]{2,}(시))?(.*[가-힣]{1,}(구))";
