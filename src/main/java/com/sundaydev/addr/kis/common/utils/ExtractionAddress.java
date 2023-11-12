@@ -52,7 +52,7 @@ public class ExtractionAddress {
             beforeWord = word;
         }
 
-//        System.out.println("preProcess result: " + seqList);
+        System.out.println("preProcess result: " + seqList);
 
         Set<String> candidateSet = new LinkedHashSet<>();
 
@@ -67,7 +67,13 @@ public class ExtractionAddress {
                 if((subStr.endsWith(AddressConstant.KO_GU) && seqWord.endsWith(AddressConstant.KO_RO))
                         ||(subStr.endsWith(AddressConstant.KO_RO) && seqWord.endsWith(AddressConstant.KO_GIL))
                         ||(subStr.endsWith(AddressConstant.KO_GU) && seqWord.endsWith(AddressConstant.KO_GIL))){
-                    seqWord = seqWord.replaceAll(" ", "");
+
+                    Matcher m1 = pAGuRo.matcher(seqWord);
+                    Matcher m2 = pARoGil.matcher(seqWord);
+                    Matcher m3 = pAGuGil.matcher(seqWord);
+                    if(!m1.find() && !m2.find() && !m3.find()){
+                        seqWord = seqWord.replaceAll(" ", "");
+                    }
                 }
 
                 subStr = subStr +" "+ seqWord;
@@ -80,7 +86,7 @@ public class ExtractionAddress {
             }
         }
 
-//        System.out.println("postProcess candidateSet: " + candidateSet);
+        System.out.println("postProcess candidateSet: " + candidateSet);
         return candidateSet;
     }
 

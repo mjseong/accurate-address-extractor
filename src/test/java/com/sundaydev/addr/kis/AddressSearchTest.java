@@ -53,7 +53,7 @@ public class AddressSearchTest {
     public void exampleAddressTest5(){
         String in = "서울 종로구 대학로11길 9-2";
         String result = searchAddressService.extractAddress(in);
-        Assertions.assertEquals("종로구 대학로11길", result);
+        Assertions.assertEquals("종로구 대학로 11길", result);
     }
 
     @Test
@@ -68,6 +68,13 @@ public class AddressSearchTest {
         String in = "경기 성남시 분당 동판교로52번길 26";
         String result = searchAddressService.extractAddress(in);
         Assertions.assertEquals("동판교로 52번길", result);
+    }
+
+    @Test
+    public void exampleAddressTest8(){
+        String in = "서울 강북구 대학 로1 1길 9-2";
+        String result = searchAddressService.extractAddress(in);
+        Assertions.assertEquals("강북구 대학로 11길", result);
     }
 
     @Test
