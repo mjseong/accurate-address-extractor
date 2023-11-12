@@ -1,7 +1,5 @@
 package com.sundaydev.aas.utils;
 
-import com.sundaydev.aas.common.Constant;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,13 +12,20 @@ public class ExtractionAddress {
 //    private final static Pattern ROAD_GU_PATTERN = Pattern.compile(Constant.ROAD_RO_REGX);
 //    private final static Pattern ROAD_GIL_PATTERN = Pattern.compile(Constant.ROAD_GIL_REGX);
 
-    private final static Pattern pGUROGIL = Pattern.compile(KoreaRoadAddressRegxType.P_GU_RO_GIL.getRegx());
-    private final static Pattern pGuRo = Pattern.compile(KoreaRoadAddressRegxType.P_GU_RO.getRegx());
-    private final static Pattern pGuGil = Pattern.compile(KoreaRoadAddressRegxType.P_GU_GIL.getRegx());
+    private final static Pattern pAGuRoGil = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO_GIL.getRegx());
+    private final static Pattern pAGuRo = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO.getRegx());
+    private final static Pattern pAGuGil = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_GIL.getRegx());
+    private final static Pattern pARoGil = Pattern.compile(KoreaRoadAddressRegxType.P_A_RO_GIL.getRegx());
+    private final static Pattern pARo = Pattern.compile(KoreaRoadAddressRegxType.P_A_RO.getRegx());
+
     private final static Pattern pRoGil = Pattern.compile(KoreaRoadAddressRegxType.P_RO_GIL.getRegx());
     private final static Pattern pGu = Pattern.compile(KoreaRoadAddressRegxType.P_GU.getRegx());
     private final static Pattern pRo = Pattern.compile(KoreaRoadAddressRegxType.P_RO.getRegx());
     private final static Pattern pGil = Pattern.compile(KoreaRoadAddressRegxType.P_GIL.getRegx());
+
+    private final static Pattern pGuOrRo = Pattern.compile(KoreaRoadAddressRegxType.P_GU_OR_RO.getRegx());
+
+    private final static Pattern pWord = Pattern.compile("\\b[구|로|길]+");
 
 
     public static Set<String> extractAddressWithTokenizer(String candidateAddress) {
@@ -33,13 +38,14 @@ public class ExtractionAddress {
         StringJoiner stringJoiner = new StringJoiner(" ");
         String mergeWord = "";
         String beforeWord = "";
+
         //preProcess
         for(String word: words) {
 
             mergeWord = mergeWordWithCondition(mergeWord, word, beforeWord);
 
-//            System.out.println(mergeWord);
             ProcessData processData = preProcess(mergeWord);
+
             if(processData != null
                     && !processData.result().isBlank()){
                 seqList.add(processData.result());
@@ -56,22 +62,38 @@ public class ExtractionAddress {
         System.out.println("preProcess result: " + seqList);
 
         Set<String> candidateSet = new LinkedHashSet<>();
-        String seqTmp ="";
 
         //postProcess
-        for(String seqStr:seqList){
-//            String candi = concatWord(seqStr);
-//            candidateSet.add(candi);
+        for(int i = seqList.size()-1; i>=0; i--){
+            String subStr = "";
+
+            for(int j=0; j <= i; j++){
+                String seqWord = seqList.get(j);
+
+                //앞 대상의 규칙에 따라 뒤에 글자의 공백들을 제거한다.
+                if((subStr.endsWith("구") && seqWord.endsWith("로"))
+                        ||(subStr.endsWith("로") && seqWord.endsWith("길"))
+                        ||(subStr.endsWith("구") && seqWord.endsWith("길"))){
+                    seqWord = seqWord.replaceAll(" ", "");
+                }
+
+                subStr = subStr +" "+ seqWord;
+            }
+
+            Set result = postProcess(subStr.trim());
+
+            if(!result.isEmpty()){
+                candidateSet.addAll(result);
+            }
         }
 
-        System.out.println("candidateSet: " + candidateSet);
+        System.out.println("postProcess candidateSet: " + candidateSet);
         return candidateSet;
     }
 
     private static String mergeWordWithCondition(String mergeWord, String word, String beforeWord){
 
-        Pattern p = Pattern.compile("\\b[구|로|길]+");
-        Matcher m = p.matcher(word);
+        Matcher m = pWord.matcher(word);
         String result = "";
 
         //마지막 글자가 한글자일 경우 공백이 있는지 검사.
@@ -135,17 +157,36 @@ public class ExtractionAddress {
         return processData;
     }
 
-    private static String postProcess(String candidateAddress){
-        Pattern p = Pattern.compile("");
+    private static Set postProcess(String candidateAddress){
 
-        Matcher mGUROGIL = pGUROGIL.matcher(candidateAddress);
-        Matcher mGuRo = pGuRo.matcher(candidateAddress);
-        Matcher mGuGil = pGuGil.matcher(candidateAddress);
-        Matcher mRoGil = pRoGil.matcher(candidateAddress);
-        Matcher mRo = pRo.matcher(candidateAddress);
+        Set postSet = new LinkedHashSet();
+        Matcher mGUROGIL = pAGuRoGil.matcher(candidateAddress);
+        Matcher mGuRo = pAGuRo.matcher(candidateAddress);
+        Matcher mGuGil = pAGuGil.matcher(candidateAddress);
+        Matcher mRoGil = pARoGil.matcher(candidateAddress);
+        Matcher mRo = pARo.matcher(candidateAddress);
 
+        if(mGUROGIL.find()){
+            postSet.add(mGUROGIL.group());
+        }
 
-        return null;
+        if(mGuRo.find()){
+            postSet.add(mGuRo.group());
+        }
+
+        if(mGuGil.find()){
+            postSet.add(mGuGil.group());
+        }
+
+        if(mRoGil.find()){
+            postSet.add(mRoGil.group());
+        }
+
+        if(mRo.find()){
+            postSet.add(mRo.group());
+        }
+
+        return postSet;
     }
 
 

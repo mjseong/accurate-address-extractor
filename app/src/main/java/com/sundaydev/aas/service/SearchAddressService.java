@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 public class SearchAddressService {
 
-    private final Pattern P_GU_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_GU_GIL.getRegx());
-    private final Pattern P_GU_RO = Pattern.compile(KoreaRoadAddressRegxType.P_GU_RO.getRegx());
-    private final Pattern P_GU_RO_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_GU_RO_GIL.getRegx());
+    private final Pattern P_GU_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_GIL.getRegx());
+    private final Pattern P_GU_RO = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO.getRegx());
+    private final Pattern P_GU_RO_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO_GIL.getRegx());
     private final Pattern P_RO_GIL = Pattern.compile(KoreaRoadAddressRegxType.P_RO_GIL.getRegx());
 
 

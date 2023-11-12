@@ -18,7 +18,7 @@ public class ExtractionAddressUtilTest {
 
     @Test
     public void test1(){
-        var result = ExtractionAddress.extractAddressWithTokenizer("이대로 창원시 마산 합포 구 TK 컨벤 시아대 로13 0번 길 32");
+        var result = ExtractionAddress.extractAddressWithTokenizer("창원시 마산합포구  TK 컨 벤 시아대 로13 0번 길 32");
         System.out.println(result);
     }
 
@@ -40,10 +40,29 @@ public class ExtractionAddressUtilTest {
         ExtractionAddress.extractAddressWithTokenizer(in);
     }
 
+    @Test
+    public void example3Test(){
+        String in = "종로구 종 로 1 피자배달이요  ";
+        ExtractionAddress.extractAddressWithTokenizer(in);
+    }
+
+    @Test
+    public void example4Test(){
+        String in = "서울시 종로구 인사 동 길 44 쌈지길";
+        ExtractionAddress.extractAddressWithTokenizer(in);
+    }
+
+    @Test
+    public void example5Test(){
+        String in = "서울 종로구 대학로11길 9-2";
+        ExtractionAddress.extractAddressWithTokenizer(in);
+    }
+
+
 
     @Test
     public void tokenTest2(){
-        String in = "저희집 주소는 연수 컨 벤 시아대 로 1 3 0번 길 자이아파트로 보내주시면 되요.";
+        String in = "저희집 주소는 연수구 컨 벤 시아대 로 1 3 0번 길 자이아파트로 보내주시면 되요.";
         var result = ExtractionAddress.extractAddressWithTokenizer(in);
         System.out.println(result);
     }
@@ -65,7 +84,7 @@ public class ExtractionAddressUtilTest {
     public void tokenGUROTest(){
         String in = "연수구컨벤시구 아대구로";
 //        String regx = "\\b(?:([가-힣\\s*]+구))\\b|(?:([가-힣\\s*]+구)\\s*([가-힣])+)\\b";
-        Pattern p = Pattern.compile(KoreaRoadAddressRegxType.P_GU_RO.getRegx());
+        Pattern p = Pattern.compile(KoreaRoadAddressRegxType.P_A_GU_RO.getRegx());
         Matcher m = p.matcher(in);
 
         if(m.find()){
@@ -76,13 +95,13 @@ public class ExtractionAddressUtilTest {
 
     @Test
     public void tokenROGILTest(){
-        String in = "컨 벤시아대로30번길";
-        String regx = "\\b([가-힣A-Za-z·\\d~\\-\\.\\s*]+로)\\s*([가-힣A-Za-z·\\d~\\-\\.\\s*]+길)\\b";
+        String in = "수 컨벤시아대로 30번길";
+        String regx = "\\b([가-힣A-Za-z·\\d~\\-\\.]+로)\\s*([가-힣A-Za-z·\\d~\\-\\.\\s*]+길)\\b";
         Pattern p = Pattern.compile(regx);
         Matcher m = p.matcher(in);
 
         if(m.find()){
-            var result = m.group(1).replaceAll(" ", "")+" "+m.group(2).replaceAll(" ", "");
+            var result = m.group(1)+" "+m.group(2);
             System.out.println(result);
         }
     }
