@@ -38,7 +38,7 @@ public class ExtractionAddress {
             mergeWord = mergeWordWithCondition(mergeWord, word, beforeWord);
 
             PreprocessToken processToken = preprocessTokenization(mergeWord);
-//            System.out.println(mergeWord);
+            //System.out.println(mergeWord);
             if(processToken != null
                     && !processToken.result().isBlank()){
                 seqList.add(processToken.result());
@@ -52,7 +52,7 @@ public class ExtractionAddress {
             beforeWord = word;
         }
 
-        System.out.println("preProcess result: " + seqList);
+        //System.out.println("preProcess result: " + seqList);
 
         Set<String> candidateSet = new LinkedHashSet<>();
 
@@ -68,10 +68,10 @@ public class ExtractionAddress {
                         ||(subStr.endsWith(AddressConstant.KO_RO) && seqWord.endsWith(AddressConstant.KO_GIL))
                         ||(subStr.endsWith(AddressConstant.KO_GU) && seqWord.endsWith(AddressConstant.KO_GIL))){
 
-                    Matcher m1 = pAGuRo.matcher(seqWord);
-                    Matcher m2 = pARoGil.matcher(seqWord);
-                    Matcher m3 = pAGuGil.matcher(seqWord);
-                    if(!m1.find() && !m2.find() && !m3.find()){
+                    Matcher pMGuro = pAGuRo.matcher(seqWord);
+                    Matcher pMRogil = pARoGil.matcher(seqWord);
+                    Matcher pMGugil = pAGuGil.matcher(seqWord);
+                    if(!pMGuro.find() && !pMRogil.find() && !pMGugil.find()){
                         seqWord = seqWord.replaceAll(" ", "");
                     }
                 }
@@ -86,7 +86,7 @@ public class ExtractionAddress {
             }
         }
 
-        System.out.println("postProcess candidateSet: " + candidateSet);
+        //System.out.println("postProcess candidateSet: " + candidateSet);
         return candidateSet;
     }
 
