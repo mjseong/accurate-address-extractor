@@ -131,34 +131,34 @@ public class ExtractionAddress {
         Matcher mGil = pGil.matcher(candidateAddress);
         Matcher mRoGil = pRoGil.matcher(candidateAddress);
 
-        PreprocessToken processData = null;
+        PreprocessToken processToken = null;
 
         if(mRoGil.find()){
             String result = mRoGil.group(1)
                     +" "+ mRoGil.group(2);
 
-            processData = new PreprocessToken(result, null);
+            processToken = new PreprocessToken(result, null);
         }
         else if(mGu.find()) {
             String result = mGu.group(1) != null ? mGu.group(1): mGu.group(2);
             String remain = mGu.group(3) != null ? mGu.group(3) : null;
 
-            processData = new PreprocessToken(result, remain);
+            processToken = new PreprocessToken(result, remain);
         }
         else if(mRo.find()){
             String result = mRo.group(1) != null ?
                     mRo.group(1) : mRo.group(2);
             String remain = mRo.group(3) != null ? mRo.group(3) : null;
 
-            processData = new PreprocessToken(result, remain);
+            processToken = new PreprocessToken(result, remain);
         }
         else if(mGil.find()){
             String result = mGil.group(1) != null ?
                     mGil.group(1): mGil.group(2);
-            processData = new PreprocessToken(result, null);
+            processToken = new PreprocessToken(result, null);
         }
 
-        return processData;
+        return processToken;
     }
 
     /**
