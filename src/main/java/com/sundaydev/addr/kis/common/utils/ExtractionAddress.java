@@ -92,19 +92,23 @@ public class ExtractionAddress {
 
     private static String mergeWordWithCondition(String mergeWord, String word, String beforeWord){
 
+        //구|로|길 글자 매칭 확인
         Matcher m = pWord.matcher(word);
         String result = "";
 
         //마지막 글자가 한글자일 경우 공백이 있는지 검사.
         int i = mergeWord.lastIndexOf(" ");
         String whiteSpaceWord = "";
+        //뒤 공백이 2자리 이상일때 공백을 없앰.
         if(i>1){
             whiteSpaceWord = mergeWord.substring(i, mergeWord.length());
             if(whiteSpaceWord.length() > 2){
                 whiteSpaceWord = "";
             }
         }
-        if(m.find()){ //구,로,길 앞에 글자가 없다면 merge함
+
+        //입력값 문자열에서 구|로|길이 있는지 검사
+        if(m.find()){ //구,로,길 앞에 글자가 없다면 앞 글자와 merge함
             result = mergeWord + word;
         }else{
             //나머지는 글자 공백 그대로 유지
